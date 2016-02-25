@@ -52,3 +52,47 @@ let run = login({username:'lolo', password: 'password'});
 store.dispatch(run);
 
 ```
+
+## Legacy redux
+
+In a nutshell, the following code:
+
+```js
+const login = createActionAsync('LOGIN', api);
+```
+
+is equivalent to:
+
+```js
+const LOGIN_REQUEST = 'LOGIN_REQUEST'
+const LOGIN_OK = 'LOGIN_OK'
+const LOGIN_ERROR = 'LOGIN_ERROR'
+
+const loginRequest = (value) => ({
+  type: LOGIN_REQUEST,
+  payload: value
+})
+
+const loginOk = (value) => ({
+  type: LOGIN_OK,
+  payload: value
+})
+
+const loginError = (value) => ({
+  type: LOGIN_ERROR,
+  payload: value
+})
+
+export const login = (paylod) => {
+  return (dispatch) => {
+    dispatch(actions.request(payload));
+    return api(payload)
+    .then(res => {
+      dispatch(loginOk(res))
+    })
+    .catch(err => {
+      dispatch(loginError(err))
+      throw err;
+    })
+}
+```
