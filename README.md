@@ -13,6 +13,13 @@ npm install redux-act-async --save
 
 ```js
 
+import thunk from 'redux-thunk'
+import {createStore, applyMiddleware} from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import {createReducer} from 'redux-act';
+import {createActionAsync} from 'redux-act-async';
+
+// The async api to call, must be a function that return a promise
 let user = {id: 8};
 function apiOk(){
   return Promise.resolve(user);
