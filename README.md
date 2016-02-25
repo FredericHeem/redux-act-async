@@ -11,7 +11,7 @@ npm install redux-act-async --save
 ## Usage
 
 
-```
+```js
 
 let user = {id: 8};
 function apiOk(){
