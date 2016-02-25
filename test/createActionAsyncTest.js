@@ -44,9 +44,10 @@ describe.only('createActionAsync', function () {
       }
     }, initialState);
 
-    let run = login({username:'lolo', password: 'password'});
 
     const store = createStore(reducer, applyMiddleware(thunk));
+
+    let run = login({username:'lolo', password: 'password'});
 
     store.dispatch(run);
 
