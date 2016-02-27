@@ -1,6 +1,6 @@
 # redux-act-async
 
-Create async actions based on [react-act](https://github.com/pauldijou/redux-act)
+Create async actions based on [redux-act](https://github.com/pauldijou/redux-act)
 
 ## Install
 
