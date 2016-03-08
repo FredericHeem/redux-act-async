@@ -85,7 +85,7 @@ const loginError = (value) => ({
 
 export const login = (paylod) => {
   return (dispatch) => {
-    dispatch(actions.request(payload));
+    dispatch(loginRequest(payload));
     return api(payload)
     .then(res => {
       dispatch(loginOk(res))
