@@ -2,13 +2,13 @@
   "name": "redux-act-async",
   "version": "0.2.0",
   "license": "Apache-2.0",
-  "description": "Reducing the boilerplate of redux asynchronous actions",
+  "description": "Reducing the boilerplate of redux asynchronous applications",
   "keywords": [
     "async",
     "redux",
     "flux",
     "action",
-    "reducer",
+    "reducer"
   ],
   "main": "lib/index.js",
   "homepage": "https://github.com/FredericHeem/redux-act-async",
@@ -46,5 +46,8 @@
     "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive --reporter mocha-better-spec-reporter",
     "version": "npm test",
     "postversion": "git push && git push --tags"
+  },
+  "dependencies": {
+    "immutable": "3.7.6"
   }
 }

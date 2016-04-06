@@ -1,1 +1,7 @@
-export { default as createActionAsync} from './createActionAsync';
+import createActionAsync from './createActionAsync';
+import createReducerAsync from './createReducerAsync';
+
+export {
+  createActionAsync,
+  createReducerAsync
+}
