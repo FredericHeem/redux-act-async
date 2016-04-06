@@ -1,6 +1,6 @@
 # redux-act-async
 
-Create async actions based on [react-act](https://github.com/pauldijou/redux-act)
+Create async actions based on [redux-act](https://github.com/pauldijou/redux-act)
 
 ## Install
 
@@ -85,7 +85,7 @@ const loginError = (value) => ({
 
 export const login = (paylod) => {
   return (dispatch) => {
-    dispatch(actions.request(payload));
+    dispatch(loginRequest(payload));
     return api(payload)
     .then(res => {
       dispatch(loginOk(res))
