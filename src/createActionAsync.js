@@ -17,7 +17,7 @@ export default function createActionAsync(description, api, options = {}) {
       })
       .catch(err => {
         dispatch(actions.error(err))
-        throw err;
+        if(!option.noRethrow) throw err;
       })
     }
   }
