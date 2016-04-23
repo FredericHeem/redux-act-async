@@ -52,6 +52,7 @@ describe.only('createActionAsync', function () {
     store.dispatch(run);
 
   });
+  
   it('run the action, ko', function () {
     let actionName = 'LOGIN_3';
     let error = {name: 'myError'};
@@ -67,4 +68,45 @@ describe.only('createActionAsync', function () {
     }
     run(dispatch);
   });
+
+  it('run the action, but do not rethrow error', function() {
+
+    let actionName = 'LOGIN_4';
+    let error = {name: 'myError'};
+    function apiError(){
+      return Promise.reject(error);
+    }
+    const login = createActionAsync(actionName, apiError, {noRethrow: true});
+    let run = login({username:'lolo', password: 'password'});
+    function dispatch(action){
+      console.log('dispatch action:', action);  
+    }
+    
+    return run(dispatch).catch(function(error){
+      assert(false, 'when throwing is turned off, should not hit this path');
+    });
+  });
+
+  it('run the action, throw error explicitely', function() {
+
+    let actionName = 'LOGIN_5';
+    let error = {name: 'myError'};
+    function apiError(){
+      return Promise.reject(error);
+    }
+    const login = createActionAsync(actionName, apiError, {noRethrow: false});
+    let run = login({username:'lolo', password: 'password'});
+    function dispatch(action){
+      console.log('dispatch action:', action);  
+    }
+   
+    return run(dispatch).catch(function(error) {
+      expect(error.name).to.be.equal('myError');  
+    });
+  });
+
+
+
+
+
 });
