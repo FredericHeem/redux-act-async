@@ -10,7 +10,7 @@ import {createReducerAsync} from '../src/index';
 const expect = chai.expect;
 chai.use(spies);
 
-describe.only('createReducerAsync', function () {
+describe('createReducerAsync', function () {
 
   it('run the action, ok', function () {
     let actionName = 'LOGIN_2';

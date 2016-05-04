@@ -5,11 +5,12 @@ import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {createReducer} from 'redux-act';
 import {createActionAsync} from '../src/index';
+import {createReducerAsync} from '../src/index';
 
 const expect = chai.expect;
 chai.use(spies);
 
-describe.only('createActionAsync', function () {
+describe('createActionAsync', function () {
   let actionName = 'LOGIN';
 
   it('should support all format', function () {
@@ -52,7 +53,7 @@ describe.only('createActionAsync', function () {
     store.dispatch(run);
 
   });
-  
+
   it('run the action, ko', function () {
     let actionName = 'LOGIN_3';
     let error = {name: 'myError'};
@@ -79,9 +80,9 @@ describe.only('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {noRethrow: true});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      console.log('dispatch action:', action);  
+      console.log('dispatch action:', action);
     }
-    
+
     return run(dispatch).catch(function(error){
       assert(false, 'when throwing is turned off, should not hit this path');
     });
@@ -97,16 +98,30 @@ describe.only('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {noRethrow: false});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      console.log('dispatch action:', action);  
+      console.log('dispatch action:', action);
     }
-   
+
     return run(dispatch).catch(function(error) {
-      expect(error.name).to.be.equal('myError');  
+      expect(error.name).to.be.equal('myError');
     });
   });
 
 
+  it('run the action with multiple parameters', function () {
+    let actionName = 'LOGIN_6';
+    let user = {id: 8};
+    function apiOk(username, password){
+      assert.equal(username, 'ciccio');
+      assert.equal(password, 'password');
+      return Promise.resolve(user);
+    }
+    const login = createActionAsync(actionName, apiOk);
+    const reducer = createReducerAsync(login);
+    const store = createStore(reducer, applyMiddleware(thunk));
 
+    let run = login('ciccio', 'password');
 
+    store.dispatch(run);
 
+  });
 });

@@ -8,10 +8,10 @@ export default function createActionAsync(description, api, options = {}) {
     error: createAction(`${description}_ERROR`, options.payloadReducer, options.metaReducer)
   }
 
-  let actionAsync = (payload) => {
+  let actionAsync = (...args) => {
     return (dispatch) => {
-      dispatch(actions.request(payload));
-      return api(payload)
+      dispatch(actions.request());
+      return api(...args)
       .then(res => {
         dispatch(actions.ok(res))
       })
