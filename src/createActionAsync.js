@@ -11,7 +11,7 @@ export default function createActionAsync(description, api, options = {}) {
   let actionAsync = (payload) => {
     return (dispatch) => {
       dispatch(actions.request(payload));
-      return api(payload)
+      return api(payload, dispatch)
       .then(res => {
         dispatch(actions.ok(res))
       })
