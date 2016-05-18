@@ -77,7 +77,7 @@ describe('createActionAsync', function () {
     function apiError(){
       return Promise.reject(error);
     }
-    const login = createActionAsync(actionName, apiError, {noRethrow: true});
+    const login = createActionAsync(actionName, apiError, {rethrow: false});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
       console.log('dispatch action:', action);
@@ -95,7 +95,7 @@ describe('createActionAsync', function () {
     function apiError(){
       return Promise.reject(error);
     }
-    const login = createActionAsync(actionName, apiError, {noRethrow: false});
+    const login = createActionAsync(actionName, apiError, {rethrow: true});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
       console.log('dispatch action:', action);

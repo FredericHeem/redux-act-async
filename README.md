@@ -83,7 +83,7 @@ const loginError = (value) => ({
   payload: value
 })
 
-export const login = (paylod) => {
+export const login = (payload) => {
   return (dispatch) => {
     dispatch(loginRequest(payload));
     return api(payload)
