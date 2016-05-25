@@ -48,6 +48,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "immutable": "3.7.6"
+    "immutable": "3.7.6",
+    "redux-act": "0.4.2"
   }
 }

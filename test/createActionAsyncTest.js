@@ -35,13 +35,13 @@ describe('createActionAsync', function () {
 
     let reducer = createReducer({
       [login.request]: (state, payload) => {
-        console.log('login.request ', payload);
+        //console.log('login.request ', payload);
       },
       [login.ok]: (state, payload) => {
-        console.log('login.ok ', payload);
+        //console.log('login.ok ', payload);
       },
       [login.error]: (state, payload) => {
-        console.log('login.error ', payload);
+        //console.log('login.error ', payload);
       }
     }, initialState);
 
@@ -63,7 +63,7 @@ describe('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError);
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      console.log('dispatch action: ', action);
+      //console.log('dispatch action: ', action);
       //assert.equal(action.type, `${actionName}_ERROR`)
       //assert.equal(action.payload, error);
     }
@@ -80,7 +80,7 @@ describe('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {rethrow: false});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      console.log('dispatch action:', action);
+      //console.log('dispatch action:', action);
     }
 
     return run(dispatch).catch(function(error){
@@ -98,7 +98,7 @@ describe('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {rethrow: true});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      console.log('dispatch action:', action);
+      //console.log('dispatch action:', action);
     }
 
     return run(dispatch).catch(function(error) {
@@ -116,6 +116,32 @@ describe('createActionAsync', function () {
       return Promise.resolve(user);
     }
     const login = createActionAsync(actionName, apiOk);
+    const reducer = createReducerAsync(login);
+    const store = createStore(reducer, applyMiddleware(thunk));
+
+    let run = login('ciccio', 'password');
+
+    store.dispatch(run);
+
+  });
+
+  it('payloadReducer and metaReducer in options', function () {
+    let actionName = 'LOGIN_7';
+    let user = {id: 8};
+    function apiOk(username, password){
+      return Promise.resolve(user);
+    }
+    const options = {
+      payloadReducer: (payload) => {
+        //console.log('payloadReducer ', payload)
+        return payload
+      },
+      metaReducer: (payload) => {
+        //console.log('metaReducer ', payload)
+        return payload
+      }
+    }
+    const login = createActionAsync(actionName, apiOk, options);
     const reducer = createReducerAsync(login);
     const store = createStore(reducer, applyMiddleware(thunk));
 

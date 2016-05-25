@@ -3,7 +3,7 @@ import {createAction} from 'redux-act'
 export default function createActionAsync(description, api, options = {}) {
 
   let actions = {
-    request: createAction(`${description}_REQUEST`, options.payloadReducer, options.metaReducer),
+    request: createAction(`${description}_REQUEST`),
     ok: createAction(`${description}_OK`, options.payloadReducer, options.metaReducer),
     error: createAction(`${description}_ERROR`, options.payloadReducer, options.metaReducer)
   }
