@@ -1,6 +1,6 @@
 {
   "name": "redux-act-async",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "license": "Apache-2.0",
   "description": "Reducing the boilerplate of redux asynchronous applications",
   "keywords": [
