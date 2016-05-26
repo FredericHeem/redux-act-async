@@ -131,16 +131,40 @@ describe('createActionAsync', function () {
     function apiOk(username, password){
       return Promise.resolve(user);
     }
+
     const options = {
-      payloadReducer: (payload) => {
-        //console.log('payloadReducer ', payload)
-        return payload
+      request:{
+        payloadReducer: (username, password) => {
+          //console.log('request payloadReducer ', username, password)
+          return {username, password}
+        },
+        metaReducer: (payload) => {
+          //console.log('request metaReducer ', payload)
+          return payload
+        }
       },
-      metaReducer: (payload) => {
-        //console.log('metaReducer ', payload)
-        return payload
+      ok:{
+        payloadReducer: (payload) => {
+          //console.log('ok payloadReducer ', payload)
+          return payload
+        },
+        metaReducer: (payload) => {
+          //console.log('ok metaReducer ', payload)
+          return payload
+        }
+      },
+      error:{
+        payloadReducer: (payload) => {
+          //console.log('error payloadReducer ', payload)
+          return payload
+        },
+        metaReducer: (payload) => {
+          //console.log('error metaReducer ', payload)
+          return payload
+        }
       }
     }
+
     const login = createActionAsync(actionName, apiOk, options);
     const reducer = createReducerAsync(login);
     const store = createStore(reducer, applyMiddleware(thunk));

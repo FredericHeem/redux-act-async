@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "immutable": "3.7.6",
+    "lodash.defaults": "4.0.1",
     "redux-act": "0.4.2"
   }
 }
