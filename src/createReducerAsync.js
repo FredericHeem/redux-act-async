@@ -20,5 +20,5 @@ export default function createReducerAsync(actionAsync) {
             loading: false,
             error: payload
         }),
-    }, defaultState);
+    }, defaultsState);
 }
