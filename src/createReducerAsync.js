@@ -1,22 +1,24 @@
 import _ from 'lodash';
-import Immutable from 'immutable'
 import {createReducer} from 'redux-act';
 
-const _defaultsState = {
+const defaultsState = {
     loading: false,
     data: []
 };
 
-export default function createReducerAsync(actionAsync, defaultState = _defaultsState) {
+export default function createReducerAsync(actionAsync) {
     return createReducer({
-        [actionAsync.request]: () => Immutable.fromJS(_.defaults({
-            loading: true
-        }, defaultState)),
-        [actionAsync.ok]: (state, payload) => Immutable.fromJS(_.defaults({
+        [actionAsync.request]: () => ({
+            loading: true,
+            error: null
+        }),
+        [actionAsync.ok]: (state, payload) => ({
+            loading: false,
             data: payload
-        }, defaultState)),
-        [actionAsync.error]: (state, payload) => Immutable.fromJS(_.defaults({
+        }),
+        [actionAsync.error]: (state, payload) => ({
+            loading: false,
             error: payload
-        }, defaultState)),
-    }, Immutable.fromJS(defaultState));
+        }),
+    }, defaultState);
 }

@@ -16,23 +16,19 @@ describe('createReducerAsync', function () {
     let actionName = 'LOGIN_2';
     let user = {id: 8};
     function apiOk(){
+      console.log('apiOk');
       return Promise.resolve(user);
     }
     const login = createActionAsync(actionName, apiOk);
-    const initialState = {
-      loading: false,
-      authenticated: false,
-    };
 
-    let reducer = createReducerAsync(login, initialState)
-
+    let reducer = createReducerAsync(login)
 
     const store = createStore(reducer, applyMiddleware(thunk));
-
+    //console.log(store.getState())
     let run = login({username:'lolo', password: 'password'});
 
     store.dispatch(run);
-
+    //console.log(store.getState())
   });
   it('run the action, ko', function () {
     let actionName = 'LOGIN_3';
