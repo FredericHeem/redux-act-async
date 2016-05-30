@@ -21,11 +21,11 @@ export default function createActionAsync(description, api, options = defaultOpt
       return api(...args)
       .then(res => {
         dispatch(actions.ok(res))
-        if(options.ok.callback) options.ok.callback(dispatch)
+        if(options.ok.callback) options.ok.callback(dispatch, res, ...args)
       })
       .catch(err => {
         dispatch(actions.error(err))
-        if(options.error.callback) options.error.callback(dispatch)
+        if(options.error.callback) options.error.callback(dispatch, err, ...args)
         if(options.rethrow) throw err;
       })
     }
