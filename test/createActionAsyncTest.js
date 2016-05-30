@@ -127,6 +127,10 @@ describe('createActionAsync', function () {
 
   it('payloadReducer and metaReducer in options', function () {
     let actionName = 'LOGIN_7';
+    let loginUser = {
+      username: 'ciccio',
+      password: 'password'
+    };
     let user = {id: 8};
     function apiOk(username, password){
       return Promise.resolve(user);
@@ -136,31 +140,37 @@ describe('createActionAsync', function () {
       request:{
         payloadReducer: (username, password) => {
           //console.log('request payloadReducer ', username, password)
+          assert.equal(username, loginUser.username);
+          assert.equal(password, loginUser.password);
           return {username, password}
         },
-        metaReducer: (payload) => {
-          //console.log('request metaReducer ', payload)
-          return payload
+        metaReducer: (meta) => {
+          //console.log('request metaReducer ', meta)
+          return meta
         }
       },
       ok:{
-        payloadReducer: (payload) => {
+        payloadReducer: (payload, username, password) => {
           //console.log('ok payloadReducer ', payload)
+          assert.equal(username, loginUser.username);
+          assert.equal(password, loginUser.password);
           return payload
         },
-        metaReducer: (payload) => {
-          //console.log('ok metaReducer ', payload)
-          return payload
+        metaReducer: (meta) => {
+          //console.log('ok metaReducer ', meta)
+          return meta
         }
       },
       error:{
-        payloadReducer: (payload) => {
+        payloadReducer: (payload, username, password) => {
           //console.log('error payloadReducer ', payload)
+          assert.equal(username, loginUser.username);
+          assert.equal(password, loginUser.password);
           return payload
         },
-        metaReducer: (payload) => {
-          //console.log('error metaReducer ', payload)
-          return payload
+        metaReducer: (meta) => {
+          //console.log('error metaReducer ', meta)
+          return meta
         }
       }
     }
@@ -169,9 +179,8 @@ describe('createActionAsync', function () {
     const reducer = createReducerAsync(login);
     const store = createStore(reducer, applyMiddleware(thunk));
 
-    let run = login('ciccio', 'password');
+    let run = login(loginUser.username, loginUser.password);
 
     store.dispatch(run);
-
   });
 });

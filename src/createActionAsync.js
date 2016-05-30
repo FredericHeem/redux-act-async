@@ -20,10 +20,10 @@ export default function createActionAsync(description, api, options = defaultOpt
       dispatch(actions.request(...args));
       return api(...args)
       .then(res => {
-        dispatch(actions.ok(res))
+        dispatch(actions.ok(res, ...args))
       })
       .catch(err => {
-        dispatch(actions.error(err))
+        dispatch(actions.error(err, ...args))
         if(options.rethrow) throw err;
       })
     }
