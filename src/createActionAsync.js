@@ -18,12 +18,15 @@ export default function createActionAsync(description, api, options = defaultOpt
   let actionAsync = (...args) => {
     return (dispatch) => {
       dispatch(actions.request(...args));
+      if(options.request.callback) options.request.callback(dispatch, getState, ...args)
       return api(...args)
       .then(res => {
         dispatch(actions.ok(res, ...args))
+        if(options.ok.callback) options.ok.callback(dispatch, getState, res, ...args)
       })
       .catch(err => {
         dispatch(actions.error(err, ...args))
+        if(options.error.callback) options.error.callback(dispatch, getState, err, ...args)
         if(options.rethrow) throw err;
       })
     }
