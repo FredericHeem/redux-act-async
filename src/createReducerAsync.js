@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {createReducer} from 'redux-act';
 
 const defaultsState = {
