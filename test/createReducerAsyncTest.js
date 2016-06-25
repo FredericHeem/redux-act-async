@@ -16,7 +16,7 @@ describe('createReducerAsync', function () {
     let actionName = 'LOGIN_2';
     let user = {id: 8};
     function apiOk(){
-      console.log('apiOk');
+      //console.log('apiOk');
       return Promise.resolve(user);
     }
     const login = createActionAsync(actionName, apiOk);

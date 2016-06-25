@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {createReducer} from 'redux-act';
-import {createActionAsync} from '../src/index';
+import {createActionAsync, ASYNC_META} from '../src/index';
 import {createReducerAsync} from '../src/index';
 
 const expect = chai.expect;
@@ -22,39 +22,24 @@ describe('createActionAsync', function () {
     expect(login.ok).to.be.a('function');
     expect(login.error).to.be.a('function');
   });
-  it('run the action, ok', function () {
+
+  it('run the action, ok', async () => {
     let actionName = 'LOGIN_2';
-    let user = {id: 8};
-    function apiOk(){
-      return Promise.resolve(user);
+    let error = {name: 'myError'};
+
+    function apiOk(username, password){
+      return Promise.resolve({user_id:1});
     }
     const login = createActionAsync(actionName, apiOk);
-    const initialState = {
-      authenticated: false,
-    };
-
-    let reducer = createReducer({
-      [login.request]: (state, payload) => {
-        //console.log('login.request ', payload);
-      },
-      [login.ok]: (state, payload) => {
-        //console.log('login.ok ', payload);
-      },
-      [login.error]: (state, payload) => {
-        //console.log('login.error ', payload);
-      }
-    }, initialState);
-
-
-    const store = createStore(reducer, applyMiddleware(thunk));
-
     let run = login({username:'lolo', password: 'password'});
-
-    store.dispatch(run);
-
+    let metas = [];
+    function dispatch(action){
+      metas.push(action.meta);
+    }
+    await run(dispatch);
+    assert.deepEqual(metas, [ASYNC_META.REQUEST, ASYNC_META.OK]);
   });
-
-  it('run the action, ko', function () {
+  it('run the action, ko', async () => {
     let actionName = 'LOGIN_3';
     let error = {name: 'myError'};
     function apiError(){
@@ -62,12 +47,12 @@ describe('createActionAsync', function () {
     }
     const login = createActionAsync(actionName, apiError);
     let run = login({username:'lolo', password: 'password'});
+    let metas = [];
     function dispatch(action){
-      //console.log('dispatch action: ', action);
-      //assert.equal(action.type, `${actionName}_ERROR`)
-      //assert.equal(action.payload, error);
+      metas.push(action.meta);
     }
-    run(dispatch);
+    await run(dispatch);
+    assert.deepEqual(metas, [ASYNC_META.REQUEST, ASYNC_META.ERROR]);
   });
 
   it('run the action, but do not rethrow error', function() {
@@ -80,7 +65,6 @@ describe('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {rethrow: false});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(action){
-      //console.log('dispatch action:', action);
     }
 
     return run(dispatch).catch(function(error){
@@ -182,5 +166,36 @@ describe('createActionAsync', function () {
     let run = login(loginUser.username, loginUser.password);
 
     store.dispatch(run);
+  });
+  it('simple use case with reducer and store', function () {
+    let actionName = 'LOGIN_2';
+    let user = {id: 8};
+    function apiOk(){
+      return Promise.resolve(user);
+    }
+    const login = createActionAsync(actionName, apiOk);
+    const initialState = {
+      authenticated: false,
+    };
+
+    let reducer = createReducer({
+      [login.request]: (state, payload) => {
+        //console.log('login.request ', payload);
+      },
+      [login.ok]: (state, payload) => {
+        //console.log('login.ok ', payload);
+      },
+      [login.error]: (state, payload) => {
+        //console.log('login.error ', payload);
+      }
+    }, initialState);
+
+
+    const store = createStore(reducer, applyMiddleware(thunk));
+
+    let run = login({username:'lolo', password: 'password'});
+
+    store.dispatch(run);
+
   });
 });

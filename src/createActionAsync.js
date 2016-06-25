@@ -1,10 +1,28 @@
 import {createAction} from 'redux-act'
 import _defaults from 'lodash.defaults';
 
+export const ASYNC_META = {
+  REQUEST: "REQUEST",
+  OK: "OK",
+  ERROR: "ERROR"
+}
+
 const defaultOption = {
-  request:{},
-  ok:{},
-  error:{}
+  request:{
+    metaReducer: () => {
+      return ASYNC_META.REQUEST
+    }
+  },
+  ok:{
+    metaReducer: () => {
+      return ASYNC_META.OK
+    }
+  },
+  error:{
+    metaReducer: () => {
+      return ASYNC_META.ERROR
+    }
+  }
 }
 
 export default function createActionAsync(description, api, options = defaultOption) {
@@ -28,7 +46,6 @@ export default function createActionAsync(description, api, options = defaultOpt
       })
     }
   }
-
   actionAsync.request = actions.request;
   actionAsync.ok = actions.ok;
   actionAsync.error = actions.error;
