@@ -37,12 +37,19 @@ export default function createActionAsync(description, api, options = defaultOpt
     return (dispatch) => {
       dispatch(actions.request(...args));
       return api(...args)
-      .then(res => {
-        dispatch(actions.ok(res, ...args))
+      .then(response => {
+        dispatch(actions.ok({
+            request: args,
+            response: response
+        }))
       })
-      .catch(err => {
-        dispatch(actions.error(err, ...args))
-        if(options.rethrow) throw err;
+      .catch(error => {
+        const errorOut = {
+            request: args,
+            error: error
+        }
+        dispatch(actions.error(errorOut))
+        if(options.rethrow) throw errorOut;
       })
     }
   }

@@ -11,13 +11,13 @@ const expect = chai.expect;
 chai.use(spies);
 
 describe('createActionAsync', function () {
-  let actionName = 'LOGIN';
+  const actionName = 'LOGIN';
+  const param = {username:'lolo', password: 'password'};
 
   it('should support all format', function () {
     let actionName = 'LOGIN_1';
     const login = createActionAsync(actionName, () => Promise.resolve());
     expect(login).to.be.a('function');
-    //expect(login.run).to.be.a('function');
     expect(login.request).to.be.a('function');
     expect(login.ok).to.be.a('function');
     expect(login.error).to.be.a('function');
@@ -31,7 +31,7 @@ describe('createActionAsync', function () {
       return Promise.resolve({user_id:1});
     }
     const login = createActionAsync(actionName, apiOk);
-    let run = login({username:'lolo', password: 'password'});
+    let run = login(param);
     let metas = [];
     function dispatch(action){
       metas.push(action.meta);
@@ -46,7 +46,7 @@ describe('createActionAsync', function () {
       return Promise.reject(error);
     }
     const login = createActionAsync(actionName, apiError);
-    let run = login({username:'lolo', password: 'password'});
+    let run = login(param);
     let metas = [];
     function dispatch(action){
       metas.push(action.meta);
@@ -80,18 +80,20 @@ describe('createActionAsync', function () {
       return Promise.reject(error);
     }
     const login = createActionAsync(actionName, apiError, {rethrow: true});
-    let run = login({username:'lolo', password: 'password'});
+    let run = login(param);
     function dispatch(action){
       //console.log('dispatch action:', action);
     }
 
     return run(dispatch).catch(function(error) {
-      expect(error.name).to.be.equal('myError');
+      //console.log('dispatch error:', error);
+      expect(error.request[0]).to.be.equal(param);
+      expect(error.error.name).to.be.equal('myError');
     });
   });
 
 
-  it('run the action with multiple parameters', function () {
+  it('run the action with multiple parameters', async () => {
     let actionName = 'LOGIN_6';
     let user = {id: 8};
     function apiOk(username, password){
@@ -105,8 +107,8 @@ describe('createActionAsync', function () {
 
     let run = login('ciccio', 'password');
 
-    store.dispatch(run);
-
+    await store.dispatch(run);
+    //console.log('store ', store.getState())
   });
 
   it('payloadReducer and metaReducer in options', function () {
@@ -167,7 +169,7 @@ describe('createActionAsync', function () {
 
     store.dispatch(run);
   });
-  it('simple use case with reducer and store', function () {
+  it('simple use case with reducer and store', async () => {
     let actionName = 'LOGIN_2';
     let user = {id: 8};
     function apiOk(){
@@ -183,7 +185,8 @@ describe('createActionAsync', function () {
         //console.log('login.request ', payload);
       },
       [login.ok]: (state, payload) => {
-        //console.log('login.ok ', payload);
+        //console.log('login.ok ', payload.request);
+        //console.log('login.ok ', payload.response);
       },
       [login.error]: (state, payload) => {
         //console.log('login.error ', payload);
@@ -193,9 +196,48 @@ describe('createActionAsync', function () {
 
     const store = createStore(reducer, applyMiddleware(thunk));
 
-    let run = login({username:'lolo', password: 'password'});
 
-    store.dispatch(run);
+    let run = login(param);
 
+    await store.dispatch(run);
+
+  });
+  it('multiple tabs', async () => {
+    let actionName = 'TAB';
+    let user = {id: 8};
+    function apiOk(){
+      return Promise.resolve(user);
+    }
+    const tabActionAsync = createActionAsync(actionName, apiOk);
+
+    const initialState = {
+      data: new Map(),
+      loading: new Map()
+    };
+
+    function reducer(state = initialState, action) {
+      switch (action.type) {
+        case tabActionAsync.request.getType():{
+          //console.log('tab.request ', action);
+          return {
+            ...state,
+            request: action.payload
+          }
+        }
+        case tabActionAsync.ok.getType():{
+          //console.log('tab.ok ', action);
+          return {
+            ...state,
+            data: action.payload.response
+          }
+        }
+        default:
+          return state
+      }
+    }
+
+    const store = createStore(reducer, applyMiddleware(thunk));
+    await store.dispatch(tabActionAsync('tab1'));
+    //console.log("state ", store.getState());
   });
 });

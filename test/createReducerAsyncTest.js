@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import chai, {assert} from 'chai';
 import spies from 'chai-spies';
 import thunk from 'redux-thunk'
@@ -12,9 +13,9 @@ chai.use(spies);
 
 describe('createReducerAsync', function () {
 
-  it('run the action, ok', function () {
-    let actionName = 'LOGIN_2';
-    let user = {id: 8};
+  it('run the action, ok', async () => {
+    const actionName = 'LOGIN_2';
+    const user = {id: 8};
     function apiOk(){
       //console.log('apiOk');
       return Promise.resolve(user);
@@ -25,14 +26,18 @@ describe('createReducerAsync', function () {
 
     const store = createStore(reducer, applyMiddleware(thunk));
     //console.log(store.getState())
-    let run = login({username:'lolo', password: 'password'});
+    const params = {username:'lolo', password: 'password'};
+    let run = login(params);
 
-    store.dispatch(run);
+    await store.dispatch(run);
     //console.log(store.getState())
+    assert(_.isEqual(store.getState().request, params))
+    assert.isFalse(store.getState().loading)
+
   });
-  it('run the action, ko', function () {
-    let actionName = 'LOGIN_3';
-    let error = {name: 'myError'};
+  it('run the action, ko', async () => {
+    const actionName = 'LOGIN_3';
+    const error = {name: 'myError'};
     function apiError(){
       return Promise.reject(error);
     }
@@ -47,8 +52,13 @@ describe('createReducerAsync', function () {
 
     const store = createStore(reducer, applyMiddleware(thunk));
 
-    let run = login({username:'lolo', password: 'password'});
+    const params = {username:'lolo', password: 'password'};
+    let run = login(params);
 
-    store.dispatch(run);
+    await store.dispatch(run);
+    //console.log("state: ", store.getState());
+    assert(_.isEqual(store.getState().request, params))
+    assert.equal(store.getState().error, error)
+    assert.isFalse(store.getState().loading)
   });
 });
