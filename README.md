@@ -7,6 +7,9 @@ Create async actions based on [redux-act](https://github.com/pauldijou/redux-act
 ```bash
 npm install redux-act-async --save
 ```
+## Badges
+
+[![Build Status](https://travis-ci.org/FredericHeem/redux-act-async.svg?branch=master)](https://travis-ci.org/FredericHeem/redux-act-async)
 
 ## Usage
 
