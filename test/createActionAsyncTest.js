@@ -92,7 +92,6 @@ describe('createActionAsync', function () {
     });
   });
 
-
   it('run the action with multiple parameters', async () => {
     let actionName = 'LOGIN_6';
     let user = {id: 8};
@@ -109,6 +108,25 @@ describe('createActionAsync', function () {
 
     await store.dispatch(run);
     //console.log('store ', store.getState())
+  });
+
+  it('run the action with dispatch and getState-function as parameter', async () => {
+    let actionName = 'LOGIN_8';
+    let user = {id: 8};
+    function apiOk(username, password, dispatch, getState) {
+      assert.equal(username, 'ciccio');
+      assert.equal(password, 'password');
+      expect(dispatch).to.be.a('function');
+      expect(getState).to.be.a('function');
+      return Promise.resolve(user);
+    }
+    const login = createActionAsync(actionName, apiOk);
+    const reducer = createReducerAsync(login);
+    const store = createStore(reducer, applyMiddleware(thunk));
+    let run = login('ciccio', 'password');
+
+    await store.dispatch(run);
+
   });
 
   it('payloadReducer and metaReducer in options', function () {
