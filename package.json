@@ -47,7 +47,8 @@
     "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register --reporter mocha-better-spec-reporter",
     "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive --reporter mocha-better-spec-reporter",
     "version": "npm test",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "postinstall": "npm run clean && npm run build",
   },
   "dependencies": {
     "lodash.defaults": "4.0.1",
