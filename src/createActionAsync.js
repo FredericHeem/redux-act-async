@@ -1,10 +1,28 @@
 import {createAction} from 'redux-act'
 import _defaults from 'lodash.defaults';
 
+export const ASYNC_META = {
+  REQUEST: "REQUEST",
+  OK: "OK",
+  ERROR: "ERROR"
+}
+
 const defaultOption = {
-  request:{},
-  ok:{},
-  error:{}
+  request:{
+    metaReducer: () => {
+      return ASYNC_META.REQUEST
+    }
+  },
+  ok:{
+    metaReducer: () => {
+      return ASYNC_META.OK
+    }
+  },
+  error:{
+    metaReducer: () => {
+      return ASYNC_META.ERROR
+    }
+  }
 }
 
 export default function createActionAsync(description, api, options = defaultOption) {
@@ -16,22 +34,28 @@ export default function createActionAsync(description, api, options = defaultOpt
   }
 
   let actionAsync = (...args) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
       dispatch(actions.request(...args));
-      if(options.request.callback) options.request.callback(dispatch, getState, ...args)
-      return api(...args)
-      .then(res => {
-        dispatch(actions.ok(res, ...args))
-        if(options.ok.callback) options.ok.callback(dispatch, getState, res, ...args)
+      if(options.request.callback) options.request.callback(dispatch, getState, ...args);
+      return api(...args, dispatch, getState)
+      .then(response => {
+        dispatch(actions.ok({
+            request: args,
+            response: response
+        }))
+        if(options.ok.callback) options.ok.callback(dispatch, getState, res, ...args);
       })
-      .catch(err => {
-        dispatch(actions.error(err, ...args))
-        if(options.error.callback) options.error.callback(dispatch, getState, err, ...args)
-        if(options.rethrow) throw err;
+      .catch(error => {
+        const errorOut = {
+            request: args,
+            error: error
+        }
+        dispatch(actions.error(errorOut))
+        if(options.error.callback) options.error.callback(dispatch, getState, err, ...args);
+        if(options.rethrow) throw errorOut;
       })
     }
   }
-
   actionAsync.request = actions.request;
   actionAsync.ok = actions.ok;
   actionAsync.error = actions.error;

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {createReducer} from 'redux-act';
 
 const defaultsState = {
@@ -8,17 +7,21 @@ const defaultsState = {
 
 export default function createReducerAsync(actionAsync) {
     return createReducer({
-        [actionAsync.request]: () => ({
+        [actionAsync.request]: (state, payload) => ({
+            ...state,
+            request: payload,
             loading: true,
             error: null
         }),
         [actionAsync.ok]: (state, payload) => ({
+            ...state,
             loading: false,
-            data: payload
+            data: payload.response
         }),
         [actionAsync.error]: (state, payload) => ({
+            ...state,
             loading: false,
-            error: payload
+            error: payload.error
         }),
     }, defaultsState);
 }

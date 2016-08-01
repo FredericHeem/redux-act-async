@@ -7,6 +7,9 @@ Create async actions based on [redux-act](https://github.com/pauldijou/redux-act
 ```bash
 npm install redux-act-async --save
 ```
+## Badges
+
+[![Build Status](https://travis-ci.org/FredericHeem/redux-act-async.svg?branch=master)](https://travis-ci.org/FredericHeem/redux-act-async)
 
 ## Usage
 
@@ -33,23 +36,29 @@ const initialState = {
 };
 
 let reducer = createReducer({
-  [login.request]: (state, payload) => {
-    console.log('login.request ', payload);
-  },
-  [login.ok]: (state, payload) => {
-    console.log('login.ok ', payload);
-  },
-  [login.error]: (state, payload) => {
-    console.log('login.error ', payload);
-  }
-}, initialState);
-
+    [login.request]: (state, payload) => ({
+        ...state,
+        request: payload,
+        loading: true,
+        error: null
+    }),
+    [login.ok]: (state, payload) => ({
+        ...state,
+        loading: false,
+        data: payload.response
+    }),
+    [login.error]: (state, payload) => ({
+        ...state,
+        loading: false,
+        error: payload.error
+    }),
+}, defaultsState);
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
 let run = login({username:'lolo', password: 'password'});
 
-store.dispatch(run);
+await store.dispatch(run);
 
 ```
 
