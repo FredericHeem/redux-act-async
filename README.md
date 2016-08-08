@@ -52,7 +52,7 @@ let reducer = createReducer({
         loading: false,
         error: payload.error
     }),
-}, defaultsState);
+}, initialState);
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
