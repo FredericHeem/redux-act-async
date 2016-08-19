@@ -47,6 +47,7 @@ export default function createActionAsync(description, api, options = defaultOpt
       })
       .catch(error => {
         const errorOut = {
+            api,
             request: args,
             error: error
         }
