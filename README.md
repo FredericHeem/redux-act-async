@@ -67,7 +67,8 @@ await store.dispatch(run);
 In a nutshell, the following code:
 
 ```js
-const login = createActionAsync('LOGIN', api);
+const options = {rethrow: true};
+const login = createActionAsync('LOGIN', api, options);
 ```
 
 is equivalent to:
@@ -92,16 +93,27 @@ const loginError = (value) => ({
   payload: value
 })
 
-export const login = (payload) => {
-  return (dispatch) => {
-    dispatch(loginRequest(payload));
-    return api(payload)
-    .then(res => {
-      dispatch(loginOk(res))
+const options = {rethrow: true};
+
+export const login = (...args) => {
+  return (dispatch, getState) => {
+    dispatch(loginRequest(...args));
+    return api(...args, dispatch, getState)
+    .then(response => {
+      dispatch(loginOk({
+          request: args,
+          response: response
+      }))
     })
-    .catch(err => {
-      dispatch(loginError(err))
-      throw err;
+    .catch(error => {
+      const errorOut = {
+          actionAsync,
+          request: args,
+          error: error
+      }
+      dispatch(loginError(errorOut))
+      if(options.rethrow) throw errorOut;
     })
+  }
 }
 ```
