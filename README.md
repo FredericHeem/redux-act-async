@@ -7,12 +7,12 @@ Create async actions based on [redux-act](https://github.com/pauldijou/redux-act
 ```bash
 npm install redux-act-async --save
 ```
+
 ## Badges
 
 [![Build Status](https://travis-ci.org/FredericHeem/redux-act-async.svg?branch=master)](https://travis-ci.org/FredericHeem/redux-act-async)
 
 ## Usage
-
 
 ```js
 
@@ -117,3 +117,7 @@ export const login = (...args) => {
   }
 }
 ```
+
+## Who is using this library ?
+
+This library has been extracted originally from [starhack.it](https://github.com/FredericHeem/starhackit), a React/Node Full Stack Starter Kit.
