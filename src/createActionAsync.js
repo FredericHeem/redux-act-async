@@ -43,16 +43,16 @@ export default function createActionAsync(description, api, options = defaultOpt
             request: args,
             response: response
         }))
-        if(options.ok.callback) options.ok.callback(dispatch, getState, res, ...args);
+        if(options.ok.callback) options.ok.callback(dispatch, getState, response, ...args);
       })
       .catch(error => {
         const errorOut = {
-            api,
+            actionAsync,
             request: args,
             error: error
         }
         dispatch(actions.error(errorOut))
-        if(options.error.callback) options.error.callback(dispatch, getState, err, ...args);
+        if(options.error.callback) options.error.callback(dispatch, getState, errorOut, ...args);
         if(options.rethrow) throw errorOut;
       })
     }
