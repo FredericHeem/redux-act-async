@@ -88,7 +88,7 @@ describe('createActionAsync', function () {
 
     return run(dispatch).catch(function(error) {
       //console.log('dispatch error:', error);
-      assert(_.isFunction(error.api), "error.api should be a function");
+      assert(_.isFunction(error.actionAsync), "error.actionAsync should be a function");
       expect(error.request[0]).to.be.equal(param);
       expect(error.error.name).to.be.equal('myError');
     });
