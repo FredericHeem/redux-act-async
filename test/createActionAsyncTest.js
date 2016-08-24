@@ -3,7 +3,6 @@ import chai, {assert} from 'chai';
 import spies from 'chai-spies';
 import thunk from 'redux-thunk'
 import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import {createReducer} from 'redux-act';
 import {createActionAsync, ASYNC_META} from '../src/index';
 import {createReducerAsync} from '../src/index';
@@ -12,7 +11,6 @@ const expect = chai.expect;
 chai.use(spies);
 
 describe('createActionAsync', function () {
-  const actionName = 'LOGIN';
   const param = {username:'lolo', password: 'password'};
 
   it('should support all format', function () {
@@ -26,9 +24,8 @@ describe('createActionAsync', function () {
 
   it('run the action, ok', async () => {
     let actionName = 'LOGIN_2';
-    let error = {name: 'myError'};
 
-    function apiOk(username, password){
+    function apiOk(/*param*/){
       return Promise.resolve({user_id:1});
     }
     const login = createActionAsync(actionName, apiOk);
@@ -65,10 +62,10 @@ describe('createActionAsync', function () {
     }
     const login = createActionAsync(actionName, apiError, {rethrow: false});
     let run = login({username:'lolo', password: 'password'});
-    function dispatch(action){
+    function dispatch(/*action*/){
     }
 
-    return run(dispatch).catch(function(error){
+    return run(dispatch).catch(function(/*error*/){
       assert(false, 'when throwing is turned off, should not hit this path');
     });
   });
@@ -83,6 +80,7 @@ describe('createActionAsync', function () {
     const login = createActionAsync(actionName, apiError, {rethrow: true});
     let run = login(param);
     function dispatch(action){
+      assert(action)
       //console.log('dispatch action:', action);
     }
 
@@ -138,7 +136,7 @@ describe('createActionAsync', function () {
       password: 'password'
     };
     let user = {id: 8};
-    function apiOk(username, password){
+    function apiOk(/*username, password*/){
       return Promise.resolve(user);
     }
 
@@ -202,13 +200,16 @@ describe('createActionAsync', function () {
 
     let reducer = createReducer({
       [login.request]: (state, payload) => {
+        assert(payload);
         //console.log('login.request ', payload);
       },
       [login.ok]: (state, payload) => {
+        assert(payload);
         //console.log('login.ok ', payload.request);
         //console.log('login.ok ', payload.response);
       },
       [login.error]: (state, payload) => {
+        assert(payload);
         //console.log('login.error ', payload);
       }
     }, initialState);

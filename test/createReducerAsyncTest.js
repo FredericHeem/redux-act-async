@@ -3,12 +3,9 @@ import chai, {assert} from 'chai';
 import spies from 'chai-spies';
 import thunk from 'redux-thunk'
 import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import {createReducer} from 'redux-act';
 import {createActionAsync} from '../src/index';
 import {createReducerAsync} from '../src/index';
 
-const expect = chai.expect;
 chai.use(spies);
 
 describe('createReducerAsync', function () {

@@ -1,0 +1,17 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+      'mocha'
+    ],
+    "extends": ["eslint:recommended"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+    "rules": {
+        "no-debugger": 1,
+        "no-console": 1
+    }
+}

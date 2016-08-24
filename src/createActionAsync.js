@@ -62,4 +62,4 @@ export default function createActionAsync(description, api, options = defaultOpt
   actionAsync.error = actions.error;
   return actionAsync;
 
-};
+}
