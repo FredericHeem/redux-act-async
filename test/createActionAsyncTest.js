@@ -49,7 +49,11 @@ describe('createActionAsync', function () {
     function dispatch(action){
       metas.push(action.meta);
     }
-    await run(dispatch);
+    try {
+      await run(dispatch);
+    } catch(error){
+      
+    }
     assert.deepEqual(metas, [ASYNC_META.REQUEST, ASYNC_META.ERROR]);
   });
 
@@ -60,7 +64,7 @@ describe('createActionAsync', function () {
     function apiError(){
       return Promise.reject(error);
     }
-    const login = createActionAsync(actionName, apiError, {rethrow: false});
+    const login = createActionAsync(actionName, apiError, {noRethrow: true});
     let run = login({username:'lolo', password: 'password'});
     function dispatch(/*action*/){
     }
@@ -77,7 +81,7 @@ describe('createActionAsync', function () {
     function apiError(){
       return Promise.reject(error);
     }
-    const login = createActionAsync(actionName, apiError, {rethrow: true});
+    const login = createActionAsync(actionName, apiError);
     let run = login(param);
     function dispatch(action){
       assert(action)
@@ -106,8 +110,8 @@ describe('createActionAsync', function () {
 
     let run = login('ciccio', 'password');
 
-    await store.dispatch(run);
-    //console.log('store ', store.getState())
+    const {response} = await store.dispatch(run);
+    assert.equal(response, user);
   });
 
   it('run the action with dispatch and getState-function as parameter', async () => {

@@ -39,11 +39,14 @@ export default function createActionAsync(description, api, options = defaultOpt
       if(options.request.callback) options.request.callback(dispatch, getState, ...args);
       return api(...args, dispatch, getState)
       .then(response => {
-        dispatch(actions.ok({
+        const out = {
             request: args,
             response: response
-        }))
+        }
+
+        dispatch(actions.ok(out))
         if(options.ok.callback) options.ok.callback(dispatch, getState, response, ...args);
+        return out;
       })
       .catch(error => {
         const errorOut = {
@@ -53,7 +56,7 @@ export default function createActionAsync(description, api, options = defaultOpt
         }
         dispatch(actions.error(errorOut))
         if(options.error.callback) options.error.callback(dispatch, getState, errorOut, ...args);
-        if(options.rethrow) throw errorOut;
+        if(!options.noRethrow) throw errorOut;
       })
     }
   }

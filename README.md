@@ -93,17 +93,20 @@ const loginError = (value) => ({
   payload: value
 })
 
-const options = {rethrow: true};
+const options = {noRethrow: true};
 
 export const login = (...args) => {
   return (dispatch, getState) => {
     dispatch(loginRequest(...args));
     return api(...args, dispatch, getState)
     .then(response => {
-      dispatch(loginOk({
+      const out = {
           request: args,
           response: response
-      }))
+      }
+
+      dispatch(loginError(out))
+      return out;
     })
     .catch(error => {
       const errorOut = {
@@ -112,7 +115,7 @@ export const login = (...args) => {
           error: error
       }
       dispatch(loginError(errorOut))
-      if(options.rethrow) throw errorOut;
+      if(!options.noRethrow) throw errorOut;
     })
   }
 }

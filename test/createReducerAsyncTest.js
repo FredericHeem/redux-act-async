@@ -38,7 +38,7 @@ describe('createReducerAsync', function () {
     function apiError(){
       return Promise.reject(error);
     }
-    const login = createActionAsync(actionName, apiError);
+    const login = createActionAsync(actionName, apiError, {noRethrow: true});
 
     const initialState = {
       loading: false,
