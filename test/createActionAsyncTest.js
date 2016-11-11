@@ -20,6 +20,7 @@ describe('createActionAsync', function () {
     expect(login.request).to.be.a('function');
     expect(login.ok).to.be.a('function');
     expect(login.error).to.be.a('function');
+    expect(login.reset).to.be.a('function');
   });
 
   it('run the action, ok', async () => {
@@ -52,7 +53,7 @@ describe('createActionAsync', function () {
     try {
       await run(dispatch);
     } catch(error){
-      
+
     }
     assert.deepEqual(metas, [ASYNC_META.REQUEST, ASYNC_META.ERROR]);
   });

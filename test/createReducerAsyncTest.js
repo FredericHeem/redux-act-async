@@ -31,7 +31,13 @@ describe('createReducerAsync', function () {
     assert(_.isEqual(store.getState().request, params))
     assert.isFalse(store.getState().loading)
 
+    // Reset the state
+    await store.dispatch(login.reset());
+    //console.log(store.getState())
+    assert.isUndefined(store.getState().error)
+    assert(_.isEmpty(store.getState().data))
   });
+
   it('run the action, ko', async () => {
     const actionName = 'LOGIN_3';
     const error = {name: 'myError'};

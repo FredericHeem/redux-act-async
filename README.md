@@ -28,7 +28,7 @@ function apiOk(){
   return Promise.resolve(user);
 }
 
-// createActionAsync will create 3 synchronous action creators: login.request, login.ok and login.error
+// createActionAsync will create 4 synchronous action creators: login.request, login.ok, login.error and login.reset
 const login = createActionAsync('LOGIN', apiOk);
 
 const initialState = {
@@ -52,6 +52,7 @@ let reducer = createReducer({
         loading: false,
         error: payload.error
     }),
+    [actionAsync.reset]: () => (defaultsState)
 }, initialState);
 
 const store = createStore(reducer, applyMiddleware(thunk));

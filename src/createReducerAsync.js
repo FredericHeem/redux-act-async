@@ -23,5 +23,6 @@ export default function createReducerAsync(actionAsync) {
             loading: false,
             error: payload.error
         }),
+        [actionAsync.reset]: () => (defaultsState)
     }, defaultsState);
 }

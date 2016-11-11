@@ -4,7 +4,8 @@ import _defaults from 'lodash.defaults';
 export const ASYNC_META = {
   REQUEST: "REQUEST",
   OK: "OK",
-  ERROR: "ERROR"
+  ERROR: "ERROR",
+  RESET: "RESET"
 }
 
 const defaultOption = {
@@ -28,9 +29,10 @@ const defaultOption = {
 export default function createActionAsync(description, api, options = defaultOption) {
   _defaults(options, defaultOption);
   let actions = {
-    request: createAction(`${description}_REQUEST`, options.request.payloadReducer, options.request.metaReducer),
-    ok: createAction(`${description}_OK`, options.ok.payloadReducer, options.ok.metaReducer),
-    error: createAction(`${description}_ERROR`, options.error.payloadReducer, options.error.metaReducer)
+    request: createAction(`${description}_${ASYNC_META.REQUEST}`, options.request.payloadReducer, options.request.metaReducer),
+    ok: createAction(`${description}_${ASYNC_META.OK}`, options.ok.payloadReducer, options.ok.metaReducer),
+    error: createAction(`${description}_${ASYNC_META.ERROR}`, options.error.payloadReducer, options.error.metaReducer),
+    reset: createAction(`${description}_${ASYNC_META.RESET}`)
   }
 
   let actionAsync = (...args) => {
@@ -60,9 +62,11 @@ export default function createActionAsync(description, api, options = defaultOpt
       })
     }
   }
-  actionAsync.request = actions.request;
+
+  Object.assign(actionAsync, actions);
+  /*actionAsync.request = actions.request;
   actionAsync.ok = actions.ok;
   actionAsync.error = actions.error;
+  actionAsync.reset = actions.reset;*/
   return actionAsync;
-
 }
