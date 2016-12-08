@@ -8,9 +8,11 @@ Create async actions and reducers based on [redux-act](https://github.com/pauldi
 npm install redux-act-async --save
 ```
 
-## Badges
+## Badges 
 
 [![Build Status](https://travis-ci.org/FredericHeem/redux-act-async.svg?branch=master)](https://travis-ci.org/FredericHeem/redux-act-async)
+
+[![codecov](https://codecov.io/gh/FredericHeem/redux-act-async/branch/master/graph/badge.svg)](https://codecov.io/gh/FredericHeem/redux-act-async)
 
 ## Usage
 
