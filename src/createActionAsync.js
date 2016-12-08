@@ -1,5 +1,5 @@
 import {createAction} from 'redux-act'
-import _defaults from 'lodash.defaultsDeep';
+import _defaults from 'lodash.defaultsdeep';
 
 export const ASYNC_META = {
   REQUEST: "REQUEST",
