@@ -34,8 +34,11 @@ describe('createReducerAsync', function () {
     // Reset the state
     await store.dispatch(login.reset());
     //console.log(store.getState())
-    assert.isUndefined(store.getState().error)
-    assert(_.isEmpty(store.getState().data))
+    const state = store.getState();
+    assert.isNull(state.data)
+    assert.isNull(state.error)
+    assert.isNull(state.request)
+    assert.isFalse(state.loading)
   });
 
   it('run the action, ko', async () => {

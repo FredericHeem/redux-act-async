@@ -1,5 +1,5 @@
 import {createAction} from 'redux-act'
-import _defaults from 'lodash.defaults';
+import _defaults from 'lodash.defaultsDeep';
 
 export const ASYNC_META = {
   REQUEST: "REQUEST",
@@ -9,8 +9,9 @@ export const ASYNC_META = {
 }
 
 const defaultOption = {
+  noRethrow: false,
   request:{
-    metaReducer: () => {
+    metaReducer: (meta) => {
       return ASYNC_META.REQUEST
     }
   },
@@ -27,7 +28,9 @@ const defaultOption = {
 }
 
 export default function createActionAsync(description, api, options = defaultOption) {
+
   _defaults(options, defaultOption);
+
   let actions = {
     request: createAction(`${description}_${ASYNC_META.REQUEST}`, options.request.payloadReducer, options.request.metaReducer),
     ok: createAction(`${description}_${ASYNC_META.OK}`, options.ok.payloadReducer, options.ok.metaReducer),
@@ -64,9 +67,6 @@ export default function createActionAsync(description, api, options = defaultOpt
   }
 
   Object.assign(actionAsync, actions);
-  /*actionAsync.request = actions.request;
-  actionAsync.ok = actions.ok;
-  actionAsync.error = actions.error;
-  actionAsync.reset = actions.reset;*/
+  actionAsync.options = options;
   return actionAsync;
 }

@@ -1,6 +1,6 @@
 # redux-act-async
 
-Create async actions based on [redux-act](https://github.com/pauldijou/redux-act)
+Create async actions and reducers based on [redux-act](https://github.com/pauldijou/redux-act)
 
 ## Install
 
@@ -19,47 +19,33 @@ npm install redux-act-async --save
 import thunk from 'redux-thunk'
 import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import {createReducer} from 'redux-act';
-import {createActionAsync} from 'redux-act-async';
+import {createActionAsync, createReducerAsync} from 'redux-act-async';
 
-// The async api to call, must be a function that return a promise
+// The async api to call, must be a function that returns a promise
 let user = {id: 8};
 function apiOk(){
   return Promise.resolve(user);
 }
 
-// createActionAsync will create 4 synchronous action creators: login.request, login.ok, login.error and login.reset
+// createActionAsync will create 4 synchronous action creators: 
+// login.request, login.ok, login.error and login.reset
 const login = createActionAsync('LOGIN', apiOk);
 
-const initialState = {
-  authenticated: false,
+/*
+createReducerAsync takes an async action created by createActionAsync.
+It reduces the following state given the four actions:  request, ok, error and reset.
+const defaultsState = {
+    loading: false,
+    request: null,
+    data: null,
+    error: null
 };
-
-let reducer = createReducer({
-    [login.request]: (state, payload) => ({
-        ...state,
-        request: payload,
-        loading: true,
-        error: null
-    }),
-    [login.ok]: (state, payload) => ({
-        ...state,
-        loading: false,
-        data: payload.response
-    }),
-    [login.error]: (state, payload) => ({
-        ...state,
-        loading: false,
-        error: payload.error
-    }),
-    [actionAsync.reset]: () => (defaultsState)
-}, initialState);
+*/
+const reducer = createReducerAsync(login)
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
-let run = login({username:'lolo', password: 'password'});
-
-await store.dispatch(run);
+await store.dispatch(login({username:'lolo', password: 'password'}));
 
 ```
 
@@ -69,7 +55,8 @@ In a nutshell, the following code:
 
 ```js
 const options = {noRethrow: false};
-const login = createActionAsync('LOGIN', api, options);
+const loginAction = createActionAsync('LOGIN', api, options);
+const loginReducer = createReducerAsync(loginAction)
 ```
 
 is equivalent to:
@@ -78,6 +65,7 @@ is equivalent to:
 const LOGIN_REQUEST = 'LOGIN_REQUEST'
 const LOGIN_OK = 'LOGIN_OK'
 const LOGIN_ERROR = 'LOGIN_ERROR'
+const LOGIN_RESET = 'LOGIN_RESET'
 
 const loginRequest = (value) => ({
   type: LOGIN_REQUEST,
@@ -91,6 +79,11 @@ const loginOk = (value) => ({
 
 const loginError = (value) => ({
   type: LOGIN_ERROR,
+  payload: value
+})
+
+const loginReset = (value) => ({
+  type: LOGIN_RESET,
   payload: value
 })
 
@@ -120,8 +113,82 @@ export const login = (...args) => {
     })
   }
 }
+
+const defaultsState = {
+    loading: false,
+    request: null,
+    data: null,
+    error: null
+};
+
+const reducer = createReducer({
+    [actionAsync.request]: (state, payload) => ({
+        ...state,
+        request: payload,
+        loading: true,
+        data: null,
+        error: null
+    }),
+    [actionAsync.ok]: (state, payload) => ({
+        ...state,
+        loading: false,
+        data: payload.response
+    }),
+    [actionAsync.error]: (state, payload) => ({
+        ...state,
+        loading: false,
+        error: payload.error
+    }),
+    [actionAsync.reset]: () => (defaultsState)
+} , defaultsState);
+
+
 ```
 
+That's 3 lines against 78 lines, a good way to reduce boilerplate code.
+
+## Async Action Options
+
+Here are all the options to configure an asynchronous action:
+
+```javascript
+const actionOptions = {
+  noRethrow: false,
+  request:{
+    callback: (dispatch, getState, ...args) => {
+    },
+    payloadReducer: (payload) => {
+      return payload
+    },
+    metaReducer: (meta) => {
+      return ASYNC_META.REQUEST
+    }
+  },
+  ok:{
+    callback: (dispatch, getState, ...args) => {
+    },
+    payloadReducer: (payload) => {
+      return payload
+    },
+    metaReducer: () => {
+      return ASYNC_META.OK
+    }
+  },
+  error:{
+    callback: (dispatch, getState, ...args) => {
+    },
+    payloadReducer: (payload) => {
+      return payload
+    },
+    metaReducer: () => {
+      return ASYNC_META.ERROR
+    }
+  }
+}
+
+const loginAction = createActionAsync('LOGIN', api, actionOptions);
+
+```
 ## Who is using this library ?
 
 This library has been extracted originally from [starhack.it](https://github.com/FredericHeem/starhackit), a React/Node Full Stack Starter Kit.

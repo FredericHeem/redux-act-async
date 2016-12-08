@@ -2,7 +2,9 @@ import {createReducer} from 'redux-act';
 
 const defaultsState = {
     loading: false,
-    data: []
+    request: null,
+    data: null,
+    error: null
 };
 
 export default function createReducerAsync(actionAsync) {

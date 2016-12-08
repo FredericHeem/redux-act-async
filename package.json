@@ -55,13 +55,13 @@
     "build": "babel src --out-dir lib",
     "lint": "eslint .",
     "prepublish": "npm run clean && npm run build",
-    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register --reporter mocha-better-spec-reporter",
-    "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive --reporter mocha-better-spec-reporter",
+    "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register ",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
     "version": "npm test",
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "lodash.defaults": "4.2.0",
+    "lodash.defaultsDeep": "4.6",
     "redux-act": "0.5.0"
   }
 }

@@ -266,4 +266,27 @@ describe('createActionAsync', function () {
     await store.dispatch(tabActionAsync('tab1'));
     //console.log("state ", store.getState());
   });
+
+  it('options',  () => {
+    let actionName = 'LOGIN_10';
+    function apiOk(payload){
+      return Promise.resolve(payload);
+    }
+
+    const option = {
+      noRethrow: false,
+      request: {
+        payloadReducer: (payload) => {
+          return payload
+        }
+      }
+    }
+
+    const login = createActionAsync(actionName, apiOk, option);
+    assert(login.options);
+    assert(login.options.request.payloadReducer);
+    assert(login.options.request.metaReducer);
+
+  });
+
 });
