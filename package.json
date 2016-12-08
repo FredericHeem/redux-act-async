@@ -41,6 +41,7 @@
     "eslint-plugin-promise": "3.4.0",
     "eslint-plugin-standard": "2.0.1",
     "isparta": "4.0.0",
+    "jest-cli": "17.0.3",
     "lodash": "4.17.2",
     "redux": "3.6.0",
     "redux-logger": "2.7.4",
