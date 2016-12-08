@@ -61,7 +61,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "lodash.defaultsDeep": "4.6",
+    "lodash.defaultsdeep": "4.6",
     "redux-act": "1.1.0"
   }
 }
