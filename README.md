@@ -14,6 +14,7 @@ npm install redux-act-async --save
 
 [![codecov](https://codecov.io/gh/FredericHeem/redux-act-async/branch/master/graph/badge.svg)](https://codecov.io/gh/FredericHeem/redux-act-async)
 
+[![npm version](https://badge.fury.io/js/redux-act-async.svg)](https://badge.fury.io/js/redux-act-async)
 ## Usage
 
 ```js
