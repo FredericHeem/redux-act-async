@@ -68,7 +68,7 @@ await store.dispatch(run);
 In a nutshell, the following code:
 
 ```js
-const options = {rethrow: true};
+const options = {noRethrow: false};
 const login = createActionAsync('LOGIN', api, options);
 ```
 
