@@ -11,7 +11,7 @@ chai.use(spies);
 describe('createReducerAsync', function () {
 
   it('run the action, ok', async () => {
-    const actionName = 'LOGIN_2';
+    const actionName = 'LOGIN_12';
     const user = {id: 8};
     function apiOk(){
       //console.log('apiOk');
@@ -42,7 +42,7 @@ describe('createReducerAsync', function () {
   });
 
   it('run the action, ko', async () => {
-    const actionName = 'LOGIN_3';
+    const actionName = 'LOGIN_13';
     const error = {name: 'myError'};
     function apiError(){
       return Promise.reject(error);

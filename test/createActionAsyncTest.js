@@ -193,7 +193,7 @@ describe('createActionAsync', function () {
     store.dispatch(run);
   });
   it('simple use case with reducer and store', async () => {
-    let actionName = 'LOGIN_2';
+    let actionName = 'LOGIN_9';
     let user = {id: 8};
     function apiOk(){
       return Promise.resolve(user);
