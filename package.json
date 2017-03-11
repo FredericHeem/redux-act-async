@@ -60,6 +60,6 @@
   },
   "dependencies": {
     "object-assign": "^4.1.1",
-    "redux-act": "1.1.0"
+    "redux-act": "^1.1.0"
   }
 }
