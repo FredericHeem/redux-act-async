@@ -60,6 +60,6 @@
   },
   "dependencies": {
     "lodash.defaultsdeep": "4.6",
-    "redux-act": "1.1.0"
+    "redux-act": "^1.1.0"
   }
 }
