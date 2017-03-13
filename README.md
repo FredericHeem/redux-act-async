@@ -21,7 +21,6 @@ npm install redux-act-async --save
 
 import thunk from 'redux-thunk'
 import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import {createActionAsync, createReducerAsync} from 'redux-act-async';
 
 // The async api to call, must be a function that returns a promise
