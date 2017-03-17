@@ -8,7 +8,7 @@ Create async actions and reducers based on [redux-act](https://github.com/pauldi
 npm install redux-act-async --save
 ```
 
-## Badges 
+## Badges
 
 [![Build Status](https://travis-ci.org/FredericHeem/redux-act-async.svg?branch=master)](https://travis-ci.org/FredericHeem/redux-act-async)
 
@@ -29,7 +29,7 @@ function apiOk(){
   return Promise.resolve(user);
 }
 
-// createActionAsync will create 4 synchronous action creators: 
+// createActionAsync will create 4 synchronous action creators:
 // login.request, login.ok, login.error and login.reset
 const login = createActionAsync('LOGIN', apiOk);
 
@@ -101,7 +101,7 @@ export const login = (...args) => {
           response: response
       }
 
-      dispatch(loginError(out))
+      dispatch(loginOk(out))
       return out;
     })
     .catch(error => {
