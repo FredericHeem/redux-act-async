@@ -7,7 +7,7 @@ const defaultsState = {
     error: null
 };
 
-export default function createReducerAsync(actionAsync) {
+export default function createReducerAsync(actionAsync, defaultState = defaultsState) {
     return createReducer({
         [actionAsync.request]: (state, payload) => ({
             ...state,
@@ -25,6 +25,6 @@ export default function createReducerAsync(actionAsync) {
             loading: false,
             error: payload.error
         }),
-        [actionAsync.reset]: () => (defaultsState)
-    }, defaultsState);
+        [actionAsync.reset]: () => (defaultState)
+    }, defaultState);
 }

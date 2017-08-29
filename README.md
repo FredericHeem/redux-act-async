@@ -42,6 +42,18 @@ const defaultsState = {
     data: null,
     error: null
 };
+
+if you need to overwrite the defaultsState just insert your initialState as a second paramenter in the createReducerAsync function. Just like that:
+
+const initialState = {
+    loading: false,
+    request: null,
+    data: {custom: "intitial data"},
+    error: null
+};
+
+const reducer = createReducerAsync(login, initialState)
+
 */
 const reducer = createReducerAsync(login)
 
