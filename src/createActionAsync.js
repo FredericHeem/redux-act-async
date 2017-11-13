@@ -44,10 +44,10 @@ export default function createActionAsync(description, api, options = defaultOpt
   }
 
   let actionAsync = (...args) => {
-    return (dispatch, getState) => {
+    return (dispatch, getState, extraArgument) => {
       dispatch(actions.request(...args));
       if(options.request.callback) options.request.callback(dispatch, getState, ...args);
-      return api(...args, dispatch, getState)
+      return api(...args, dispatch, getState, extraArgument)
       .then(response => {
         const out = {
             request: args,
